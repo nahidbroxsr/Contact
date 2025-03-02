@@ -1,0 +1,37 @@
+<?php include 'db.php'; ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Fire Diamond Top-Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Free Fire Diamond Order</h2>
+    <form action="order.php" method="post">
+        <label>Player ID:</label>
+        <input type="text" name="player_id" required>
+
+        <label>Select Diamond Package:</label>
+        <select name="diamond_package">
+            <option value="100 Diamonds - $1">100 Diamonds - $1</option>
+            <option value="500 Diamonds - $5">500 Diamonds - $5</option>
+            <option value="1000 Diamonds - $10">1000 Diamonds - $10</option>
+        </select>
+
+        <label>Payment Method:</label>
+        <select name="payment_method">
+            <option value="Bkash">Bkash</option>
+            <option value="Nagad">Nagad</option>
+            <option value="Rocket">Rocket</option>
+        </select>
+
+        <label>Transaction ID:</label>
+        <input type="text" name="transaction_id" required>
+
+        <button type="submit">Submit Order</button>
+    </form>
+</body>
+</html>
