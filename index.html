@@ -1,35 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Fire Diamond Top-Up</title>
-    <link rel="stylesheet" href="style.css">
+    <title>অ্যাকাউন্ট একটিভেশন</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        .container { max-width: 400px; margin: auto; }
+        .btn { padding: 10px 20px; margin: 10px; cursor: pointer; border: none; border-radius: 5px; }
+        .btn-nagad { background-color: #FF6600; color: white; }
+        .btn-bkash { background-color: #D600A7; color: white; }
+        .copy-box { display: none; margin-top: 10px; padding: 10px; background: #f1f1f1; border-radius: 5px; }
+        .input-box { margin-top: 15px; }
+        .submit-btn { background: blue; color: white; font-size: 16px; }
+        .loading { display: none; }
+        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.3); }
+    </style>
 </head>
 <body>
-    <h2>Free Fire Diamond Order</h2>
-    <form action="order.php" method="post">
-        <label>Player ID:</label>
-        <input type="text" name="player_id" required>
 
-        <label>Select Diamond Package:</label>
-        <select name="diamond_package">
-            <option value="100 Diamonds - $1">100 Diamonds - $1</option>
-            <option value="500 Diamonds - $5">500 Diamonds - $5</option>
-            <option value="1000 Diamonds - $10">1000 Diamonds - $10</option>
-        </select>
+<div class="container">
+    <h2>আপনার একাউন্ট একটিভ করুন</h2>
 
-        <label>Payment Method:</label>
-        <select name="payment_method">
-            <option value="Bkash">Bkash</option>
-            <option value="Nagad">Nagad</option>
-            <option value="Rocket">Rocket</option>
-        </select>
+    <button class="btn btn-nagad" onclick="showNumber('nagad')">📌 নগদ</button>
+    <button class="btn btn-bkash" onclick="showNumber('bkash')">📌 বিকাশ</button>
 
-        <label>Transaction ID:</label>
-        <input type="text" name="transaction_id" required>
+    <div id="nagad-box" class="copy-box">
+        <p>নগদ নম্বর: <b>017XXXXXXXX</b></p>
+        <button onclick="copyText('017XXXXXXXX')">কপি করুন</button>
+    </div>
 
-        <button type="submit">Submit Order</button>
-    </form>
+    <div id="bkash-box" class="copy-box">
+        <p>বিকাশ নম্বর: <b>018XXXXXXXX</b></p>
+        <button onclick="copyText('018XXXXXXXX')">কপি করুন</button>
+    </div>
+
+    <div class="input-box">
+        <input type="text" id="user-number" placeholder="আপনার নম্বর">
+        <input type="text" id="transaction-id" placeholder="ট্রানজেকশন আইডি">
+        <button class="btn submit-btn" onclick="submitRequest()">সাবমিট</button>
+        <div class="loading">🔄 লোড হচ্ছে...</div>
+    </div>
+</div>
+
+<div class="popup" id="success-popup">
+    ✅ সফলভাবে রিকোয়েস্ট পাঠানো হয়েছে। কিছুক্ষণ অপেক্ষা করুন।
+</div>
+
+<script>
+    function showNumber(method) {
+        document.getElementById("nagad-box").style.display = (method === "nagad") ? "block" : "none";
+        document.getElementById("bkash-box").style.display = (method === "bkash") ? "block" : "none";
+    }
+
+    function copyText(text) {
+        navigator.clipboard.writeText(text);
+        alert("কপি করা হয়েছে: " + text);
+    }
+
+    function submitRequest() {
+        let userNumber = document.getElementById("user-number").value;
+        let transactionID = document.getElementById("transaction-id").value;
+
+        if (userNumber === "" || transactionID === "") {
+            alert("দয়া করে সমস্ত তথ্য দিন!");
+            return;
+        }
+
+        document.querySelector(".loading").style.display = "block";
+
+        fetch("activation_request.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "user_number=" + userNumber + "&transaction_id=" + transactionID
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.querySelector(".loading").style.display = "none";
+            document.getElementById("success-popup").style.display = "block";
+            setTimeout(() => { document.getElementById("success-popup").style.display = "none"; }, 3000);
+        });
+    }
+</script>
+
 </body>
 </html>
